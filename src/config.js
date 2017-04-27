@@ -1,5 +1,5 @@
 const config = {
-    resourceSite: "http://femonzor.github.io/resource"
+    resourcePrefix: "http://femonzor.github.io/resource/react-gallery"
 };
 
 export default config;

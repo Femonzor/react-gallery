@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from "react";
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+import ImgFigure from "../imgFigure";
 import config from "../../config";
 import "./index.less";
 
@@ -7,17 +7,24 @@ const imagesData = require("../../data/imagesData.json");
 
 (array => {
     array.forEach(item => {
-        item.imageUrl = `${config.resourceSite}/${item.fileName}`;
+        item.imageUrl = `${config.resourcePrefix}/${item.fileName}`;
     });
 })(imagesData);
 
 class Gallery extends Component {
     render() {
+        let controllerUnits = [],
+            imgFigures = [];
+        imagesData.forEach(item => {
+            imgFigures.push(<ImgFigure data={item} />);
+        });
         return (
             <section className="stage">
                 <section className="img-sec">
+                    {imgFigures}
                 </section>
                 <nav className="controller-nav">
+                    {controllerUnits}
                 </nav>
             </section>
         )
