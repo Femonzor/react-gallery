@@ -1,7 +1,7 @@
 {
   "name": "react-gallery",
   "version": "1.0.0",
-  "description": "",
+  "description": "a react-gallery webapp",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,12 +15,25 @@
   ],
   "author": "Femonzor",
   "license": "MIT",
-  "dependencies": {
-    "react": "^15.2.1",
-    "react-dom": "^15.2.1"
-  },
   "bugs": {
     "url": "https://github.com/Femonzor/react-gallery/issues"
   },
-  "homepage": "https://github.com/Femonzor/react-gallery#readme"
+  "homepage": "https://github.com/Femonzor/react-gallery#readme",
+  "dependencies": {
+    "react": "^15.5.2",
+    "react-addons-css-transition-group": "^15.5.2",
+    "react-dom": "^15.5.2"
+  },
+  "devDependencies": {
+    "autoprefixer-loader": "^3.2.0",
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "json-loader": "^0.5.4",
+    "url-loader": "^0.5.8",
+    "webpack": "^2.4.1",
+    "webpack-dev-server": "^2.4.5"
+  }
 }
