@@ -15,8 +15,8 @@ class Gallery extends Component {
     render() {
         let controllerUnits = [],
             imgFigures = [];
-        imagesData.forEach(item => {
-            imgFigures.push(<ImgFigure data={item} />);
+        imagesData.forEach((item, idx) => {
+            imgFigures.push(<ImgFigure key={idx} data={item} />);
         });
         return (
             <section className="stage">
