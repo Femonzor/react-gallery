@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from "react";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
-import config from "../config";
+import config from "../../config";
+import "./index.less";
 
-const imagesData = require("../data/imagesData.json");
+const imagesData = require("../../data/imagesData.json");
 
 (array => {
     array.forEach(item => {
