@@ -24,6 +24,7 @@ const getRangeRandom = (low, high) => {
 
 class Gallery extends Component {
     constructor() {
+        super();
         this.state = {
             imgsArrangeArr: []
         };
@@ -50,7 +51,6 @@ class Gallery extends Component {
      */
     rearrange(centerIdx) {
         const
-            { imgsArrangeArr } = this.state,
             { constant } = this,
             { centerPos, hPosRange, vPosRange } = constant,
             hPosRangeLeftSecX = hPosRange.leftSecX,
@@ -58,14 +58,18 @@ class Gallery extends Component {
             hPosRangeY = hPosRange.y,
             vPosRangeTopY = vPosRange.topY,
             vPosRangeX = vPosRange.x,
+            topImgNum = Math.ceil(Math.random() * 2);
+        let
+            { imgsArrangeArr } = this.state,
             imgsArrangeTopArr = [],
-            topImgNum = Math.ceil(Math.random() * 2),
             topImgSpliceIdx = 0,
-            imgsArrangeCenterArr = imgsArrangeArr.splice(centerIdx, 1);
+            imgsArrangeCenterArr = imgsArrangeArr.splice(centerIdx, 1),
+            i, j, k,
+            hPosRangeLORX;
         // 首先居中 centerIdx 的图片
         imgsArrangeCenterArr[0].pos = centerPos;
         // 取出要布局上侧的图片的状态信息
-        topImgSpliceIdx = Math.ceil(Math.random() * (imgs.imgsArrangeArr.length - topImgNum));
+        topImgSpliceIdx = Math.ceil(Math.random() * (imgsArrangeArr.length - topImgNum));
         imgsArrangeTopArr = imgsArrangeArr.splice(topImgSpliceIdx, topImgNum);
         // 布局位于上侧的图片
         imgsArrangeTopArr.forEach((item, idx) => {
@@ -75,6 +79,24 @@ class Gallery extends Component {
             };
         });
         // 布局左右两侧的图片
+        for (i = 0, j = imgsArrangeArr.length, k = j / 2; i < j; i++) {
+            // 前半部分布局在左边，后半部分布局在右边
+            hPosRangeLORX = i < k ? hPosRangeLeftSecX : hPosRangeRightSecX;
+            imgsArrangeArr[i].pos = {
+                top: getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
+                left: getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
+            }
+        }
+
+        if (imgsArrangeTopArr && imgsArrangeTopArr[0]) {
+            imgsArrangeArr.splice(topImgSpliceIdx, 0, imgsArrangeTopArr[0]);
+        }
+
+        imgsArrangeArr.splice(centerIdx, 0, imgsArrangeCenterArr[0]);
+
+        this.setState({
+            imgsArrangeArr: imgsArrangeArr
+        });
     }
     componentDidMount() {
         const
@@ -82,8 +104,8 @@ class Gallery extends Component {
             stageW = stageDOM.scrollWidth,
             stageH = stageDOM.scrollHeight,
             halfStageW = Math.ceil(stageW / 2),
-            halfStageH = Math.ceil(stageH / 2)
-            imgFigureDOM = ReactDOM.findDOMNode(this.refs.imgFigure0)
+            halfStageH = Math.ceil(stageH / 2),
+            imgFigureDOM = ReactDOM.findDOMNode(this.refs.imgFigure0),
             imgW = imgFigureDOM.scrollWidth,
             imgH = imgFigureDOM.scrollHeight,
             halfImgW = Math.ceil(imgW / 2),
@@ -107,9 +129,14 @@ class Gallery extends Component {
             imgFigures = [];
         imagesData.forEach((item, idx) => {
             if (!this.state.imgsArrangeArr[idx]) {
-                this.state
+                this.state.imgsArrangeArr[idx] = {
+                    pos: {
+                        left: 0,
+                        top: 0
+                    }
+                };
             }
-            imgFigures.push(<ImgFigure key={idx} data={item} ref={`imgFigure${idx}`} />);
+            imgFigures.push(<ImgFigure key={idx} data={item} ref={"imgFigure" + idx} arrange={this.state.imgsArrangeArr[idx]} />);
         });
         return (
             <section className="stage" ref="stage">
