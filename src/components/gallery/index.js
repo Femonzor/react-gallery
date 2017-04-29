@@ -120,7 +120,7 @@ class Gallery extends Component {
         this.constant.hPosRange.y = [-halfImgH, stageH - halfImgH];
         // 计算上侧区域图片排布位置的取值范围
         this.constant.vPosRange.topY = [-halfImgH, halfStageH - halfImgH * 3];
-        this.constant.vPosRange.x = [halfImgW - imgW, halfImgW];
+        this.constant.vPosRange.x = [halfStageW - imgW, halfStageW];
 
         this.rearrange(0);
     }
