@@ -40,7 +40,8 @@ class Gallery extends Component {
                         left: 0,
                         top: 0
                     },
-                    rotate: 0
+                    rotate: 0,   // 旋转角度
+                    isInverse: false   // 图片正反面
                 }*/
             ]
         };
@@ -59,6 +60,20 @@ class Gallery extends Component {
                 topY: [0, 0]
             }
         };
+    }
+    /**
+     * 翻转图片
+     * @param  {number} idx 当前被操作翻转的图片的索引值
+     * @return {function}   一个真正待被执行的函数
+     */
+    inverse(idx) {
+        return () => {
+            let { imgsArrangeArr } = this.state;
+            imgsArrangeArr[idx].isInverse = !imgsArrangeArr[idx].isInverse;
+            this.setState({
+                imgsArrangeArr: imgsArrangeArr
+            });
+        }
     }
     /**
      * 重新布局所有图片
@@ -158,10 +173,18 @@ class Gallery extends Component {
                         left: 0,
                         top: 0
                     },
-                    rotate: 0
+                    rotate: 0,
+                    isInverse: false
                 };
             }
-            imgFigures.push(<ImgFigure key={idx} data={item} ref={"imgFigure" + idx} arrange={this.state.imgsArrangeArr[idx]} />);
+            imgFigures.push(
+                <ImgFigure
+                    key={idx}
+                    data={item}
+                    ref={"imgFigure" + idx}
+                    arrange={this.state.imgsArrangeArr[idx]}
+                    inverse={this.inverse(idx)} />
+            );
         });
         return (
             <section className="stage" ref="stage">
