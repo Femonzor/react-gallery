@@ -22,11 +22,27 @@ const getRangeRandom = (low, high) => {
     return Math.ceil(Math.random() * (high - low) + low);
 };
 
+/**
+ * 获取 0~30° 之间的一个任意正负值
+ * @return {number} 角度值
+ */
+const get30DegRandom = () => {
+    return (Math.random() > 0.5 ? "" : "-") + Math.ceil(Math.random() * 30);
+};
+
 class Gallery extends Component {
     constructor() {
         super();
         this.state = {
-            imgsArrangeArr: []
+            imgsArrangeArr: [
+                /*{
+                    pos: {
+                        left: 0,
+                        top: 0
+                    },
+                    rotate: 0
+                }*/
+            ]
         };
         this.constant = {
             centerPos: {
@@ -68,24 +84,32 @@ class Gallery extends Component {
             hPosRangeLORX;
         // 首先居中 centerIdx 的图片
         imgsArrangeCenterArr[0].pos = centerPos;
+        // 居中的 centerIdx 图片不需要旋转
+        imgsArrangeCenterArr[0].rotate = 0;
         // 取出要布局上侧的图片的状态信息
         topImgSpliceIdx = Math.ceil(Math.random() * (imgsArrangeArr.length - topImgNum));
         imgsArrangeTopArr = imgsArrangeArr.splice(topImgSpliceIdx, topImgNum);
         // 布局位于上侧的图片
         imgsArrangeTopArr.forEach((item, idx) => {
-            imgsArrangeTopArr[idx].pos = {
-                top: getRangeRandom(vPosRangeTopY[0], vPosRangeTopY[0]),
-                left: getRangeRandom(vPosRangeX[0], vPosRangeX[0])
+            imgsArrangeTopArr[idx] = {
+                pos: {
+                    top: getRangeRandom(vPosRangeTopY[0], vPosRangeTopY[0]),
+                    left: getRangeRandom(vPosRangeX[0], vPosRangeX[0])
+                },
+                rotate: get30DegRandom()
             };
         });
         // 布局左右两侧的图片
         for (i = 0, j = imgsArrangeArr.length, k = j / 2; i < j; i++) {
             // 前半部分布局在左边，后半部分布局在右边
             hPosRangeLORX = i < k ? hPosRangeLeftSecX : hPosRangeRightSecX;
-            imgsArrangeArr[i].pos = {
-                top: getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
-                left: getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
-            }
+            imgsArrangeArr[i] = {
+                pos: {
+                    top: getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
+                    left: getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
+                },
+                rotate: get30DegRandom()
+            };
         }
 
         if (imgsArrangeTopArr && imgsArrangeTopArr[0]) {
@@ -133,7 +157,8 @@ class Gallery extends Component {
                     pos: {
                         left: 0,
                         top: 0
-                    }
+                    },
+                    rotate: 0
                 };
             }
             imgFigures.push(<ImgFigure key={idx} data={item} ref={"imgFigure" + idx} arrange={this.state.imgsArrangeArr[idx]} />);

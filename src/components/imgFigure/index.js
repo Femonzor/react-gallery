@@ -3,9 +3,16 @@ import "./index.less";
 
 class ImgFigure extends Component {
     render() {
-        const { data } = this.props;
+        const { data, arrange } = this.props;
         const { imageUrl, title } = data;
-        let styleObj = this.props.arrange.pos || {};
+        const { pos, rotate } = arrange;
+        let styleObj = pos || {};
+        if (rotate) {
+            ["Moz", "Ms", "Webkit", ""].forEach(item => {
+                let prop = item ? item + "Transform" : "transform";
+                styleObj[prop] = `rotate(${rotate}deg)`;
+            });
+        }
         return (
             <figure className="img-figure" style={styleObj}>
                 <img src={imageUrl} alt={title} />
