@@ -126,13 +126,10 @@ class Gallery extends Component {
                 rotate: get30DegRandom()
             };
         }
-
         if (imgsArrangeTopArr && imgsArrangeTopArr[0]) {
             imgsArrangeArr.splice(topImgSpliceIdx, 0, imgsArrangeTopArr[0]);
         }
-
         imgsArrangeArr.splice(centerIdx, 0, imgsArrangeCenterArr[0]);
-
         this.setState({
             imgsArrangeArr: imgsArrangeArr
         });
@@ -160,7 +157,6 @@ class Gallery extends Component {
         // 计算上侧区域图片排布位置的取值范围
         this.constant.vPosRange.topY = [-halfImgH, halfStageH - halfImgH * 3];
         this.constant.vPosRange.x = [halfStageW - imgW, halfStageW];
-
         this.rearrange(0);
     }
     render() {
