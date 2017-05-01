@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from "react";
 import ReactDOM from "react-dom";
 import ImgFigure from "../imgFigure";
+import ControllerUnit from "../controllerUnit";
 import config from "../../config";
 import "./index.less";
 
@@ -199,6 +200,9 @@ class Gallery extends Component {
                     arrange={this.state.imgsArrangeArr[idx]}
                     inverse={this.inverse(idx)}
                     center={this.center(idx)} />
+            );
+            controllerUnits.push(
+                <ControllerUnit key={idx} />
             );
         });
         return (

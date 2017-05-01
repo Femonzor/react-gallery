@@ -29,6 +29,10 @@ module.exports = {
                 use: "css-loader!autoprefixer-loader!less-loader"
             })
         }, {
+            test: /\.(eot|woff|svg|ttf|woff2)(\?|$)/,
+            exclude: /^node_modules$/,
+            loader: "file-loader?name=fonts/[name].[ext]"
+        }, {
             test: /\.json$/,
             exclude: /^node_modules$/,
             loader: "json-loader"
