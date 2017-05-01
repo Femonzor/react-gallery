@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "devLocal": "webpack --config ./webpack.config.devLocal.js --progress --colors",
-    "devWeb": "webpack-dev-server --progress --colors --inline --hot --config ./webpack.config.devWeb.js"
+    "devWeb": "webpack-dev-server --progress --colors --inline --hot --config ./webpack.config.devWeb.js",
+    "prod": "webpack --config ./webpack.config.prod.js --progress --colors -p"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
   },
   "homepage": "https://github.com/Femonzor/react-gallery#readme",
   "dependencies": {
+    "classnames": "^2.2.5",
     "react": "^15.5.2",
     "react-dom": "^15.5.2"
   },

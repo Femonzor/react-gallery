@@ -103,7 +103,7 @@ class Gallery extends Component {
             hPosRangeY = hPosRange.y,
             vPosRangeTopY = vPosRange.topY,
             vPosRangeX = vPosRange.x,
-            topImgNum = Math.ceil(Math.random() * 2);
+            topImgNum = Math.floor(Math.random() * 2);
         let
             { imgsArrangeArr } = this.state,
             imgsArrangeTopArr = [],
@@ -179,10 +179,11 @@ class Gallery extends Component {
     }
     render() {
         let controllerUnits = [],
-            imgFigures = [];
+            imgFigures = [],
+            { imgsArrangeArr } = this.state;
         imagesData.forEach((item, idx) => {
-            if (!this.state.imgsArrangeArr[idx]) {
-                this.state.imgsArrangeArr[idx] = {
+            if (!imgsArrangeArr[idx]) {
+                imgsArrangeArr[idx] = {
                     pos: {
                         left: 0,
                         top: 0
@@ -197,12 +198,16 @@ class Gallery extends Component {
                     key={idx}
                     data={item}
                     ref={"imgFigure" + idx}
-                    arrange={this.state.imgsArrangeArr[idx]}
+                    arrange={imgsArrangeArr[idx]}
                     inverse={this.inverse(idx)}
                     center={this.center(idx)} />
             );
             controllerUnits.push(
-                <ControllerUnit key={idx} />
+                <ControllerUnit
+                    key={idx}
+                    arrange={imgsArrangeArr[idx]}
+                    inverse={this.inverse(idx)}
+                    center={this.center(idx)} />
             );
         });
         return (

@@ -1,5 +1,6 @@
 var webpack = require("webpack");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var CleanPlugin = require("clean-webpack-plugin");
 var HtmlPlugin = require("html-webpack-plugin");
 
 var ROOT_PATH = __dirname;
@@ -8,16 +9,14 @@ var DIST_PATH = ROOT_PATH + "/dist";
 var SITE_DIR = "/react-gallery";
 
 module.exports = {
-    devtool: "source-map",
-    entry: [
-        "webpack-dev-server/client?http://localhost:9990",
-        "webpack/hot/only-dev-server",
-        SRC_PATH + "/App.js"
-    ],
+    entry: {
+        app: SRC_PATH + "/App.js",
+        vendor: ["react", "react-dom", "classnames"]
+    },
     output: {
         path: DIST_PATH,
-        publicPath: "http://localhost:9990" + SITE_DIR + "/dist/",
-        filename: "js/bundle.js"
+        filename: "js/[name].[chunkhash:8].js",
+        publicPath: SITE_DIR + "/dist/"
     },
     module: {
         loaders: [{
@@ -41,24 +40,29 @@ module.exports = {
             loader: "json-loader"
         }]
     },
-    devServer: {
-        host: "0.0.0.0",
-        inline: true,
-        compress: true,    //是否启用gzip压缩
-        port: 9990,
-        hot: true
-    },
     plugins: [
         new webpack.DefinePlugin({
             "process.env": {
-                NODE_ENV: JSON.stringify("development")
+                NODE_ENV: JSON.stringify("production")
             }
         }),
         new HtmlPlugin({
             filename: "index.html",
-            template: SRC_PATH + "/templates/index.html"
+            template: SRC_PATH + "/templates/index.html",
+            chunksSortMode: "dependency"
         }),
-        new webpack.HotModuleReplacementPlugin(),
-        new ExtractTextPlugin("css/[name].css"),
+        new ExtractTextPlugin("css/[name].[contenthash:8].css"),
+        new webpack.optimize.CommonsChunkPlugin({
+            names: ["vendor", "manifest"]
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            output: {
+                comments: false,
+            },
+            compress: {
+                warnings: false
+            }
+        }),
+        new CleanPlugin(["dist"])
     ]
 };

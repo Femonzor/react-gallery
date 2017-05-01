@@ -46,8 +46,7 @@ module.exports = {
         }),
         new HtmlPlugin({
             filename: "index.html",
-            template: SRC_PATH + "/templates/index.html",
-            hash: false,
+            template: SRC_PATH + "/templates/index.html"
         }),
         new ExtractTextPlugin("css/[name].css"),
         new CleanPlugin(["dist"])
