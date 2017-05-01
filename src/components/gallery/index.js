@@ -41,7 +41,8 @@ class Gallery extends Component {
                         top: 0
                     },
                     rotate: 0,   // 旋转角度
-                    isInverse: false   // 图片正反面
+                    isInverse: false,   // 图片正反面
+                    isCenter: false   // 图片是否居中
                 }*/
             ]
         };
@@ -60,6 +61,8 @@ class Gallery extends Component {
                 topY: [0, 0]
             }
         };
+        this.rearrange = this.rearrange.bind(this);
+        this.center = this.center.bind(this);
     }
     /**
      * 翻转图片
@@ -74,6 +77,16 @@ class Gallery extends Component {
                 imgsArrangeArr: imgsArrangeArr
             });
         }
+    }
+    /**
+     * 利用rearrange函数，居中对应 idx 的图片
+     * @param  {number} idx 图片索引
+     * @return {function}   一个真正待被执行的函数
+     */
+    center(idx) {
+        return () => {
+            this.rearrange(idx);
+        };
     }
     /**
      * 重新布局所有图片
@@ -98,9 +111,11 @@ class Gallery extends Component {
             i, j, k,
             hPosRangeLORX;
         // 首先居中 centerIdx 的图片
-        imgsArrangeCenterArr[0].pos = centerPos;
-        // 居中的 centerIdx 图片不需要旋转
-        imgsArrangeCenterArr[0].rotate = 0;
+        imgsArrangeCenterArr[0] = {
+            pos: centerPos,
+            rotate: 0,
+            isCenter: true
+        };
         // 取出要布局上侧的图片的状态信息
         topImgSpliceIdx = Math.ceil(Math.random() * (imgsArrangeArr.length - topImgNum));
         imgsArrangeTopArr = imgsArrangeArr.splice(topImgSpliceIdx, topImgNum);
@@ -111,7 +126,8 @@ class Gallery extends Component {
                     top: getRangeRandom(vPosRangeTopY[0], vPosRangeTopY[0]),
                     left: getRangeRandom(vPosRangeX[0], vPosRangeX[0])
                 },
-                rotate: get30DegRandom()
+                rotate: get30DegRandom(),
+                isCenter: false
             };
         });
         // 布局左右两侧的图片
@@ -123,7 +139,8 @@ class Gallery extends Component {
                     top: getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
                     left: getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
                 },
-                rotate: get30DegRandom()
+                rotate: get30DegRandom(),
+                isCenter: false
             };
         }
         if (imgsArrangeTopArr && imgsArrangeTopArr[0]) {
@@ -170,7 +187,8 @@ class Gallery extends Component {
                         top: 0
                     },
                     rotate: 0,
-                    isInverse: false
+                    isInverse: false,
+                    isCenter: false
                 };
             }
             imgFigures.push(
@@ -179,7 +197,8 @@ class Gallery extends Component {
                     data={item}
                     ref={"imgFigure" + idx}
                     arrange={this.state.imgsArrangeArr[idx]}
-                    inverse={this.inverse(idx)} />
+                    inverse={this.inverse(idx)}
+                    center={this.center(idx)} />
             );
         });
         return (
