@@ -7,8 +7,7 @@ class ImgFigure extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
     handleClick(e) {
-        if (this.props.arrange.isCenter) this.props.inverse();
-        else this.props.center();
+        this.props.arrange.isCenter ? this.props.inverse() : this.props.center();
         e.stopPropagation();
         e.preventDefault();
     }
@@ -20,20 +19,18 @@ class ImgFigure extends Component {
         let imgFigureClassName = "img-figure";
         imgFigureClassName += isInverse ? " is-inverse" : "";
         if (rotate) {
-            ["Moz", "Ms", "Webkit", ""].forEach(item => {
+            ["Moz", "ms", "Webkit", ""].forEach(item => {
                 let prop = item ? item + "Transform" : "transform";
                 styleObj[prop] = `rotate(${rotate}deg)`;
             });
         }
-        if (isCenter) {
-            styleObj.zIndex = 11;
-        }
+        if (isCenter) styleObj.zIndex = 11;
         return (
             <figure className={imgFigureClassName} style={styleObj} onClick={this.handleClick}>
                 <img src={imageUrl} alt={title} />
                 <figcaption className="fig-caption">
                     <h2 className="img-title">{title}</h2>
-                    <div className="img-back" onClick={this.handleClick}>
+                    <div className="img-back">
                         <p>{desc}</p>
                     </div>
                 </figcaption>

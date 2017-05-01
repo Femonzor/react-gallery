@@ -8,8 +8,7 @@ class ControllerUnit extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
     handleClick(e) {
-        if (this.props.arrange.isCenter) this.props.inverse();
-        else this.props.center();
+        this.props.arrange.isCenter ? this.props.inverse() : this.props.center();
         e.stopPropagation();
         e.preventDefault();
     }
