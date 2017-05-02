@@ -1,6 +1,13 @@
 import React, { Component, PropTypes } from "react";
 import "./index.less";
 
+const propTypes = {
+    data: PropTypes.object,
+    arrange: PropTypes.object,
+    inverse: PropTypes.func,
+    center: PropTypes.func
+};
+
 class ImgFigure extends Component {
     constructor() {
         super();
@@ -38,5 +45,7 @@ class ImgFigure extends Component {
         );
     }
 }
+
+ImgFigure.propTypes = propTypes;
 
 export default ImgFigure;
