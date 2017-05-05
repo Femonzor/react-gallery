@@ -2,13 +2,12 @@ import React, { Component, PropTypes } from "react";
 import ClassNames from "classnames";
 import "./index.less";
 
-const propTypes = {
-    arrange: PropTypes.object,
-    inverse: PropTypes.func,
-    center: PropTypes.func
-};
-
 class ControllerUnit extends Component {
+    static propTypes = {
+        arrange: PropTypes.object,
+        inverse: PropTypes.func,
+        center: PropTypes.func
+    }
     constructor() {
         super();
         this.handleClick = this.handleClick.bind(this);
@@ -29,7 +28,5 @@ class ControllerUnit extends Component {
         return <span className={controllerUnitClassName} onClick={this.handleClick}></span>
     }
 }
-
-ControllerUnit.propTypes = propTypes;
 
 export default ControllerUnit;

@@ -1,14 +1,13 @@
 import React, { Component, PropTypes } from "react";
 import "./index.less";
 
-const propTypes = {
-    data: PropTypes.object,
-    arrange: PropTypes.object,
-    inverse: PropTypes.func,
-    center: PropTypes.func
-};
-
 class ImgFigure extends Component {
+    static propTypes = {
+        data: PropTypes.object,
+        arrange: PropTypes.object,
+        inverse: PropTypes.func,
+        center: PropTypes.func
+    }
     constructor() {
         super();
         this.handleClick = this.handleClick.bind(this);
@@ -45,7 +44,5 @@ class ImgFigure extends Component {
         );
     }
 }
-
-ImgFigure.propTypes = propTypes;
 
 export default ImgFigure;
