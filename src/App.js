@@ -1,9 +1,13 @@
 import "./styles/style.less";
-import React, { Component, PropTypes } from "react";
+import React, { Component } from "react";
 import ReactDOM, { render } from "react-dom";
-import Gallery from "./components/gallery";
+import { Provider } from "react-redux";
+import store from "./stores";
+import App from "./containers";
 
 render(
-    <Gallery />,
+    <Provider store={store}>
+        <App />
+    </Provider>,
     document.querySelector("#app")
 );

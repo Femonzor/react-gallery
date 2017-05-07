@@ -1,0 +1,2 @@
+export const IMAGES_FETCH = "IMAGES_FETCH";
+export const IMAGE_UPDATE = "IMAGE_UPDATE";

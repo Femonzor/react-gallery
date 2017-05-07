@@ -2,16 +2,7 @@ import React, { Component, PropTypes } from "react";
 import ReactDOM from "react-dom";
 import ImgFigure from "../imgFigure";
 import ControllerUnit from "../controllerUnit";
-import config from "../../config";
 import "./index.less";
-
-const imagesData = require("../../data/imagesData.json");
-
-(array => {
-    array.forEach(item => {
-        item.imageUrl = `${config.resourcePrefix}/${item.fileName}`;
-    });
-})(imagesData);
 
 /**
  * 获取区间内的随机值
@@ -34,19 +25,6 @@ const get30DegRandom = () => {
 class Gallery extends Component {
     constructor() {
         super();
-        this.state = {
-            imgsArrangeArr: [
-                /*{
-                    pos: {
-                        left: 0,
-                        top: 0
-                    },
-                    rotate: 0,   // 旋转角度
-                    isInverse: false,   // 图片正反面
-                    isCenter: false   // 图片是否居中
-                }*/
-            ]
-        };
         this.constant = {
             centerPos: {
                 left: 0,
@@ -72,11 +50,11 @@ class Gallery extends Component {
      */
     inverse(idx) {
         return () => {
-            let { imgsArrangeArr } = this.state;
+            let { imgsArrangeArr } = this.props;
             imgsArrangeArr[idx].isInverse = !imgsArrangeArr[idx].isInverse;
-            this.setState({
-                imgsArrangeArr: imgsArrangeArr
-            });
+            // this.setState({
+            //     imgsArrangeArr: imgsArrangeArr
+            // });
         }
     }
     /**
@@ -105,7 +83,7 @@ class Gallery extends Component {
             vPosRangeX = vPosRange.x,
             topImgNum = Math.floor(Math.random() * 2);
         let
-            { imgsArrangeArr } = this.state,
+            { imgsArrangeArr } = this.props,
             imgsArrangeTopArr = [],
             topImgSpliceIdx = 0,
             imgsArrangeCenterArr = imgsArrangeArr.splice(centerIdx, 1),
@@ -160,10 +138,10 @@ class Gallery extends Component {
             halfStageW = Math.ceil(stageW / 2),
             halfStageH = Math.ceil(stageH / 2),
             imgFigureDOM = ReactDOM.findDOMNode(this.refs.imgFigure0),
-            imgW = imgFigureDOM.scrollWidth,
-            imgH = imgFigureDOM.scrollHeight,
-            halfImgW = Math.ceil(imgW / 2),
-            halfImgH = Math.ceil(imgH / 2);
+            imgW = imgFigureDOM && imgFigureDOM.scrollWidth,
+            imgH = imgFigureDOM && imgFigureDOM.scrollHeight,
+            halfImgW = imgFigureDOM && Math.ceil(imgW / 2),
+            halfImgH = imgFigureDOM && Math.ceil(imgH / 2);
         this.constant.centerPos = {
             left: halfStageW - halfImgW,
             top: halfStageH - halfImgH
@@ -175,24 +153,27 @@ class Gallery extends Component {
         // 计算上侧区域图片排布位置的取值范围
         this.constant.vPosRange.topY = [-halfImgH, halfStageH - halfImgH * 3];
         this.constant.vPosRange.x = [halfStageW - imgW, halfStageW];
-        this.rearrange(0);
+        if (this.props.imgsArrangeArr.length) this.rearrange(0);
+    }
+    componentDidUpdate() {
+        console.log("componentDidUpdate");
     }
     render() {
         let controllerUnits = [],
             imgFigures = [],
-            { imgsArrangeArr } = this.state;
-        imagesData.forEach((item, idx) => {
-            if (!imgsArrangeArr[idx]) {
-                imgsArrangeArr[idx] = {
-                    pos: {
-                        left: 0,
-                        top: 0
-                    },
-                    rotate: 0,
-                    isInverse: false,
-                    isCenter: false
-                };
-            }
+            { imgsArrangeArr } = this.props;
+        imgsArrangeArr.forEach((item, idx) => {
+            // if (!imgsArrangeArr[idx]) {
+            //     imgsArrangeArr[idx] = {
+            //         pos: {
+            //             left: 0,
+            //             top: 0
+            //         },
+            //         rotate: 0,
+            //         isInverse: false,
+            //         isCenter: false
+            //     };
+            // }
             imgFigures.push(
                 <ImgFigure
                     key={idx}
