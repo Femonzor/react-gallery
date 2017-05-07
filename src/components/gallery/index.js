@@ -1,8 +1,9 @@
+import "./index.less";
 import React, { Component, PropTypes } from "react";
 import ReactDOM from "react-dom";
 import ImgFigure from "../imgFigure";
 import ControllerUnit from "../controllerUnit";
-import "./index.less";
+import actions from "../../actions";
 
 /**
  * 获取区间内的随机值
@@ -42,6 +43,7 @@ class Gallery extends Component {
         };
         this.rearrange = this.rearrange.bind(this);
         this.center = this.center.bind(this);
+        this.updateConstant = this.updateConstant.bind(this);
     }
     /**
      * 翻转图片
@@ -74,7 +76,8 @@ class Gallery extends Component {
      */
     rearrange(centerIdx) {
         const
-            { constant } = this,
+            { constant, props } = this,
+            { dispatch } = props,
             { centerPos, hPosRange, vPosRange } = constant,
             hPosRangeLeftSecX = hPosRange.leftSecX,
             hPosRangeRightSecX = hPosRange.rightSecX,
@@ -84,11 +87,20 @@ class Gallery extends Component {
             topImgNum = Math.floor(Math.random() * 2);
         let
             { imgsArrangeArr } = this.props,
+            newImgsArrangeArr = [],
             imgsArrangeTopArr = [],
             topImgSpliceIdx = 0,
-            imgsArrangeCenterArr = imgsArrangeArr.splice(centerIdx, 1),
+            imgsArrangeCenterArr,
             i, j, k,
             hPosRangeLORX;
+        imgsArrangeArr.forEach((item, idx) => {
+            newImgsArrangeArr.push({});
+            newImgsArrangeArr[idx].pos = item.pos;
+            newImgsArrangeArr[idx].rotate = item.rotate;
+            newImgsArrangeArr[idx].isInverse = item.isInverse;
+            newImgsArrangeArr[idx].isCenter = item.isCenter;
+        });
+        imgsArrangeCenterArr = newImgsArrangeArr.splice(centerIdx, 1),
         // 首先居中 centerIdx 的图片
         imgsArrangeCenterArr[0] = {
             pos: centerPos,
@@ -96,8 +108,8 @@ class Gallery extends Component {
             isCenter: true
         };
         // 取出要布局上侧的图片的状态信息
-        topImgSpliceIdx = Math.ceil(Math.random() * (imgsArrangeArr.length - topImgNum));
-        imgsArrangeTopArr = imgsArrangeArr.splice(topImgSpliceIdx, topImgNum);
+        topImgSpliceIdx = Math.ceil(Math.random() * (newImgsArrangeArr.length - topImgNum));
+        imgsArrangeTopArr = newImgsArrangeArr.splice(topImgSpliceIdx, topImgNum);
         // 布局位于上侧的图片
         imgsArrangeTopArr.forEach((item, idx) => {
             imgsArrangeTopArr[idx] = {
@@ -110,10 +122,10 @@ class Gallery extends Component {
             };
         });
         // 布局左右两侧的图片
-        for (i = 0, j = imgsArrangeArr.length, k = j / 2; i < j; i++) {
+        for (i = 0, j = newImgsArrangeArr.length, k = j / 2; i < j; i++) {
             // 前半部分布局在左边，后半部分布局在右边
             hPosRangeLORX = i < k ? hPosRangeLeftSecX : hPosRangeRightSecX;
-            imgsArrangeArr[i] = {
+            newImgsArrangeArr[i] = {
                 pos: {
                     top: getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
                     left: getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
@@ -123,14 +135,12 @@ class Gallery extends Component {
             };
         }
         if (imgsArrangeTopArr && imgsArrangeTopArr[0]) {
-            imgsArrangeArr.splice(topImgSpliceIdx, 0, imgsArrangeTopArr[0]);
+            newImgsArrangeArr.splice(topImgSpliceIdx, 0, imgsArrangeTopArr[0]);
         }
-        imgsArrangeArr.splice(centerIdx, 0, imgsArrangeCenterArr[0]);
-        this.setState({
-            imgsArrangeArr: imgsArrangeArr
-        });
+        newImgsArrangeArr.splice(centerIdx, 0, imgsArrangeCenterArr[0]);
+        dispatch(actions.setImages(newImgsArrangeArr));
     }
-    componentDidMount() {
+    updateConstant() {
         const
             stageDOM = ReactDOM.findDOMNode(this.refs.stage),
             stageW = stageDOM.scrollWidth,
@@ -138,10 +148,10 @@ class Gallery extends Component {
             halfStageW = Math.ceil(stageW / 2),
             halfStageH = Math.ceil(stageH / 2),
             imgFigureDOM = ReactDOM.findDOMNode(this.refs.imgFigure0),
-            imgW = imgFigureDOM && imgFigureDOM.scrollWidth,
-            imgH = imgFigureDOM && imgFigureDOM.scrollHeight,
-            halfImgW = imgFigureDOM && Math.ceil(imgW / 2),
-            halfImgH = imgFigureDOM && Math.ceil(imgH / 2);
+            imgW = imgFigureDOM.scrollWidth,
+            imgH = imgFigureDOM.scrollHeight,
+            halfImgW = Math.ceil(imgW / 2),
+            halfImgH = Math.ceil(imgH / 2);
         this.constant.centerPos = {
             left: halfStageW - halfImgW,
             top: halfStageH - halfImgH
@@ -153,10 +163,18 @@ class Gallery extends Component {
         // 计算上侧区域图片排布位置的取值范围
         this.constant.vPosRange.topY = [-halfImgH, halfStageH - halfImgH * 3];
         this.constant.vPosRange.x = [halfStageW - imgW, halfStageW];
-        if (this.props.imgsArrangeArr.length) this.rearrange(0);
+        this.rearrange(0);
+    }
+    componentDidMount() {
+        if (this.props.imgsArrangeArr.length) this.updateConstant();
+    }
+    shouldComponentUpdate(nextProps, nextState) {
+        debugger;
+        console.log("shouldComponentUpdate");
+        return this.props.imgsArrangeArr.length !== nextProps.imgsArrangeArr.length;
     }
     componentDidUpdate() {
-        console.log("componentDidUpdate");
+        if (this.props.imgsArrangeArr.length) this.updateConstant();
     }
     render() {
         let controllerUnits = [],

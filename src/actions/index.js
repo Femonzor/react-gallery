@@ -21,5 +21,6 @@ const setImages = (imgsArrangeArr) => {
 };
 
 export default {
-    fetchImages
+    fetchImages,
+    setImages
 };

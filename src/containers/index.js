@@ -4,6 +4,10 @@ import Gallery from "../components/gallery";
 import actions from "../actions";
 
 class App extends Component {
+    shouldComponentUpdate(nextProps, nextState) {
+        debugger;
+        return this.props.imgsArrangeArr.length !== nextProps.imgsArrangeArr.length;
+    }
     componentDidMount() {
         const { dispatch, imgsArrangeArr } = this.props;
         if (!imgsArrangeArr.length) dispatch(actions.fetchImages());
