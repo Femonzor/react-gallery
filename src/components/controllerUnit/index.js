@@ -5,7 +5,7 @@ import "./index.less";
 
 class ControllerUnit extends Component {
     static propTypes = {
-        arrange: PropTypes.object,
+        data: PropTypes.object,
         inverse: PropTypes.func,
         center: PropTypes.func
     }
@@ -14,13 +14,13 @@ class ControllerUnit extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
     handleClick(e) {
-        this.props.arrange.isCenter ? this.props.inverse() : this.props.center();
+        this.props.data.isCenter ? this.props.inverse() : this.props.center();
         e.stopPropagation();
         e.preventDefault();
     }
     render() {
-        const { arrange } = this.props;
-        const { isInverse, isCenter } = arrange;
+        const { data } = this.props;
+        const { isInverse, isCenter } = data;
         const controllerUnitClassName = ClassNames({
             "controller-unit": true,
             "is-center": isCenter,

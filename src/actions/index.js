@@ -5,7 +5,7 @@ const fetchImages = () => {
     return dispatch => {
         let imagesData = require("../data/imagesData.json");
         imagesData.forEach(item => {
-            item.imageUrl = `${config.resourcePrefix}/${item.fileName}`;
+            item.info.imageUrl = `${config.resourcePrefix}/${item.info.fileName}`;
         });
         dispatch(setImages(imagesData));
     };

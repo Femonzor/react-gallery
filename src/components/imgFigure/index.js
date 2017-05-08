@@ -5,7 +5,6 @@ import "./index.less";
 class ImgFigure extends Component {
     static propTypes = {
         data: PropTypes.object,
-        arrange: PropTypes.object,
         inverse: PropTypes.func,
         center: PropTypes.func
     }
@@ -19,9 +18,9 @@ class ImgFigure extends Component {
         e.preventDefault();
     }
     render() {
-        const { data, arrange } = this.props;
-        const { imageUrl, title, desc } = data;
-        const { pos, rotate, isInverse, isCenter } = arrange;
+        const { data } = this.props;
+        const { info, pos, rotate, isInverse, isCenter } = data;
+        const { imageUrl, title, desc } = info;
         let styleObj = pos || {};
         let imgFigureClassName = "img-figure";
         imgFigureClassName += isInverse ? " is-inverse" : "";

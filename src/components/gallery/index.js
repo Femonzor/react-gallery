@@ -99,40 +99,41 @@ class Gallery extends Component {
             newImgsArrangeArr[idx].rotate = item.rotate;
             newImgsArrangeArr[idx].isInverse = item.isInverse;
             newImgsArrangeArr[idx].isCenter = item.isCenter;
+            newImgsArrangeArr[idx].info = item.info;
         });
         imgsArrangeCenterArr = newImgsArrangeArr.splice(centerIdx, 1),
         // 首先居中 centerIdx 的图片
-        imgsArrangeCenterArr[0] = {
+        imgsArrangeCenterArr[0] = { ...imgsArrangeCenterArr[0], ...{
             pos: centerPos,
             rotate: 0,
             isCenter: true
-        };
+        } };
         // 取出要布局上侧的图片的状态信息
         topImgSpliceIdx = Math.ceil(Math.random() * (newImgsArrangeArr.length - topImgNum));
         imgsArrangeTopArr = newImgsArrangeArr.splice(topImgSpliceIdx, topImgNum);
         // 布局位于上侧的图片
         imgsArrangeTopArr.forEach((item, idx) => {
-            imgsArrangeTopArr[idx] = {
+            imgsArrangeTopArr[idx] = { ...imgsArrangeTopArr[idx], ...{
                 pos: {
                     top: getRangeRandom(vPosRangeTopY[0], vPosRangeTopY[0]),
                     left: getRangeRandom(vPosRangeX[0], vPosRangeX[0])
                 },
                 rotate: get30DegRandom(),
                 isCenter: false
-            };
+            } };
         });
         // 布局左右两侧的图片
         for (i = 0, j = newImgsArrangeArr.length, k = j / 2; i < j; i++) {
             // 前半部分布局在左边，后半部分布局在右边
             hPosRangeLORX = i < k ? hPosRangeLeftSecX : hPosRangeRightSecX;
-            newImgsArrangeArr[i] = {
+            newImgsArrangeArr[i] = { ...newImgsArrangeArr[i], ...{
                 pos: {
                     top: getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
                     left: getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
                 },
                 rotate: get30DegRandom(),
                 isCenter: false
-            };
+            } };
         }
         if (imgsArrangeTopArr && imgsArrangeTopArr[0]) {
             newImgsArrangeArr.splice(topImgSpliceIdx, 0, imgsArrangeTopArr[0]);
@@ -171,7 +172,7 @@ class Gallery extends Component {
     shouldComponentUpdate(nextProps, nextState) {
         debugger;
         console.log("shouldComponentUpdate");
-        return this.props.imgsArrangeArr.length !== nextProps.imgsArrangeArr.length;
+        return this.props.imgsArrangeArr !== nextProps.imgsArrangeArr;
     }
     componentDidUpdate() {
         if (this.props.imgsArrangeArr.length) this.updateConstant();
@@ -194,17 +195,16 @@ class Gallery extends Component {
             // }
             imgFigures.push(
                 <ImgFigure
-                    key={idx}
+                    key={item.info.id}
                     data={item}
                     ref={"imgFigure" + idx}
-                    arrange={imgsArrangeArr[idx]}
                     inverse={this.inverse(idx)}
                     center={this.center(idx)} />
             );
             controllerUnits.push(
                 <ControllerUnit
-                    key={idx}
-                    arrange={imgsArrangeArr[idx]}
+                    key={item.info.id}
+                    data={item}
                     inverse={this.inverse(idx)}
                     center={this.center(idx)} />
             );
