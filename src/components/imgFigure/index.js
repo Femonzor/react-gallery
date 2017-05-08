@@ -13,7 +13,7 @@ class ImgFigure extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
     handleClick(e) {
-        this.props.arrange.isCenter ? this.props.inverse() : this.props.center();
+        this.props.data.isCenter ? this.props.inverse() : this.props.center();
         e.stopPropagation();
         e.preventDefault();
     }

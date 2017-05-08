@@ -1,2 +1,2 @@
-export const IMAGES_FETCH = "IMAGES_FETCH";
-export const IMAGE_UPDATE = "IMAGE_UPDATE";
+export const IMAGES_UPDATE = "IMAGES_UPDATE";
+export const IMAGE_FLIP = "IMAGE_FLIP";

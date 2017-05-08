@@ -20,11 +20,14 @@ const fetchImages = () => {
 
 const setImages = (imgsArrangeArr) => {
     return {
-        type: actionTypes.IMAGES_FETCH,
+        type: actionTypes.IMAGES_UPDATE,
         payload: {
             imgsArrangeArr
         }
     };
+};
+
+const flipImage = (id, isInverse) => {
 };
 
 export default {

@@ -7,13 +7,9 @@ const initState = {
 
 const imagesReducer = (state = initState, action) => {
     switch (action.type) {
-        case actionTypes.IMAGES_FETCH:
+        case actionTypes.IMAGES_UPDATE:
             return { ...state, ...{
                 imgsArrangeArr: action.payload.imgsArrangeArr
-            } };
-        case actionTypes.IMAGE_UPDATE:
-            return { ...state, ...{
-                [action.payload.id]: imageReducer(state[action.payload.id], action)
             } };
         default:
             return state;

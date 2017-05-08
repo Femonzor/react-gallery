@@ -28,6 +28,10 @@ const initState = {
 
 const imageReducer = (state = initState, action) => {
     switch (action.type) {
+        case actionTypes.IMAGE_FLIP:
+            return { ...state, ...{
+                isInverse: action.payload.isInverse
+            } };
         default:
             return state;
     }
