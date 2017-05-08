@@ -44,6 +44,20 @@ class Gallery extends Component {
         this.rearrange = this.rearrange.bind(this);
         this.center = this.center.bind(this);
         this.updateConstant = this.updateConstant.bind(this);
+        this.init = this.init.bind(this);
+    }
+    /**
+     * 初始化
+     * @return {null} 无
+     */
+    init() {
+        const imgsArrangeArr = this.props.imgsArrangeArr;
+        let flag = true;
+        imgsArrangeArr.forEach(item => {
+            if (item.isCenter) flag = false;
+        });
+        // 如果所有图片都不在中心并且有图片，则需要初始化
+        if (flag && imgsArrangeArr.length) this.updateConstant();
     }
     /**
      * 翻转图片
@@ -167,32 +181,23 @@ class Gallery extends Component {
         this.rearrange(0);
     }
     componentDidMount() {
-        if (this.props.imgsArrangeArr.length) this.updateConstant();
+        this.init();
     }
-    shouldComponentUpdate(nextProps, nextState) {
-        debugger;
-        console.log("shouldComponentUpdate");
-        return this.props.imgsArrangeArr !== nextProps.imgsArrangeArr;
-    }
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     let i = 0, len = Math.min(this.props.imgsArrangeArr.length, nextProps.imgsArrangeArr.length);
+    //     for (i = 0; i < len; i++) {
+    //         if (this.props.imgsArrangeArr[i].isCenter && nextProps.imgsArrangeArr[i].isCenter) return false;
+    //     }
+    //     return true;
+    // }
     componentDidUpdate() {
-        if (this.props.imgsArrangeArr.length) this.updateConstant();
+        this.init();
     }
     render() {
         let controllerUnits = [],
             imgFigures = [],
             { imgsArrangeArr } = this.props;
         imgsArrangeArr.forEach((item, idx) => {
-            // if (!imgsArrangeArr[idx]) {
-            //     imgsArrangeArr[idx] = {
-            //         pos: {
-            //             left: 0,
-            //             top: 0
-            //         },
-            //         rotate: 0,
-            //         isInverse: false,
-            //         isCenter: false
-            //     };
-            // }
             imgFigures.push(
                 <ImgFigure
                     key={item.info.id}

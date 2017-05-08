@@ -21,7 +21,11 @@ class ImgFigure extends Component {
         const { data } = this.props;
         const { info, pos, rotate, isInverse, isCenter } = data;
         const { imageUrl, title, desc } = info;
-        let styleObj = pos || {};
+        let styleObj = {};
+        if (pos) {
+            styleObj.left = pos.left;
+            styleObj.top = pos.top;
+        }
         let imgFigureClassName = "img-figure";
         imgFigureClassName += isInverse ? " is-inverse" : "";
         if (rotate) {
