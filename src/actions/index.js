@@ -27,10 +27,18 @@ const setImages = (imgsArrangeArr) => {
     };
 };
 
-const flipImage = (id, isInverse) => {
+const flipImage = (idx, isInverse) => {
+    return {
+        type: actionTypes.IMAGE_FLIP,
+        payload: {
+            idx,
+            isInverse
+        }
+    };
 };
 
 export default {
     fetchImages,
-    setImages
+    setImages,
+    flipImage
 };

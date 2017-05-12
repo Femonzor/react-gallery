@@ -1,4 +1,5 @@
 import * as actionTypes from "../constants/ActionTypes";
+import { fromJS } from "immutable";
 
 const initState = {
     /**
@@ -29,9 +30,7 @@ const initState = {
 const imageReducer = (state = initState, action) => {
     switch (action.type) {
         case actionTypes.IMAGE_FLIP:
-            return { ...state, ...{
-                isInverse: action.payload.isInverse
-            } };
+            return fromJS(state).set("isInverse", action.payload.isInverse).toJS();
         default:
             return state;
     }

@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import ImgFigure from "../imgFigure";
 import ControllerUnit from "../controllerUnit";
 import actions from "../../actions";
+import { fromJS } from "immutable";
 
 /**
  * 获取区间内的随机值
@@ -67,18 +68,7 @@ class Gallery extends Component {
     inverse(idx) {
         return () => {
             let { dispatch, imgsArrangeArr } = this.props;
-            let newImgsArrangeArr = [];
-            imgsArrangeArr.forEach((item, idx) => {
-                newImgsArrangeArr.push({});
-                newImgsArrangeArr[idx].pos = item.pos;
-                newImgsArrangeArr[idx].rotate = item.rotate;
-                newImgsArrangeArr[idx].isInverse = item.isInverse;
-                newImgsArrangeArr[idx].isCenter = item.isCenter;
-                newImgsArrangeArr[idx].info = item.info;
-            });
-            // newImgsArrangeArr[idx].isInverse = !newImgsArrangeArr[idx].isInverse;
-            imgsArrangeArr[idx].isInverse = !imgsArrangeArr[idx].isInverse;
-            dispatch(actions.setImages(imgsArrangeArr));
+            dispatch(actions.flipImage(idx, !imgsArrangeArr[idx].isInverse));
         }
     }
     /**
