@@ -76,8 +76,9 @@ class Gallery extends Component {
                 newImgsArrangeArr[idx].isCenter = item.isCenter;
                 newImgsArrangeArr[idx].info = item.info;
             });
-            newImgsArrangeArr[idx].isInverse = !newImgsArrangeArr[idx].isInverse;
-            dispatch(actions.setImages(newImgsArrangeArr));
+            // newImgsArrangeArr[idx].isInverse = !newImgsArrangeArr[idx].isInverse;
+            imgsArrangeArr[idx].isInverse = !imgsArrangeArr[idx].isInverse;
+            dispatch(actions.setImages(imgsArrangeArr));
         }
     }
     /**
@@ -190,13 +191,6 @@ class Gallery extends Component {
     componentDidMount() {
         this.init();
     }
-    // shouldComponentUpdate(nextProps, nextState) {
-    //     let i = 0, len = Math.min(this.props.imgsArrangeArr.length, nextProps.imgsArrangeArr.length);
-    //     for (i = 0; i < len; i++) {
-    //         if (this.props.imgsArrangeArr[i].isCenter && nextProps.imgsArrangeArr[i].isCenter) return false;
-    //     }
-    //     return true;
-    // }
     componentDidUpdate() {
         this.init();
     }
