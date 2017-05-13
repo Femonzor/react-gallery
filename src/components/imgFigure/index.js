@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import ClassNames from "classnames";
+import { is } from "immutable";
 import "./index.less";
 
 class ImgFigure extends Component {
@@ -13,21 +15,33 @@ class ImgFigure extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
     handleClick(e) {
-        this.props.data.isCenter ? this.props.inverse() : this.props.center();
+        this.props.data.get("isCenter") ? this.props.inverse() : this.props.center();
         e.stopPropagation();
         e.preventDefault();
     }
+    shouldComponentUpdate(nextProps, nextState) {
+        return !is(this.props.data, nextProps.data);
+    }
     render() {
-        const { data } = this.props;
-        const { info, pos, rotate, isInverse, isCenter } = data;
-        const { imageUrl, title, desc } = info;
+        const
+            { data } = this.props,
+            info = data.get("info"),
+            pos = data.get("pos"),
+            rotate = data.get("rotate"),
+            isInverse = data.get("isInverse"),
+            isCenter = data.get("isCenter"),
+            imageUrl = info.get("imageUrl"),
+            title = info.get("title"),
+            desc = info.get("desc"),
+            imgFigureClassName = ClassNames({
+                "img-figure": true,
+                "is-inverse": isInverse
+            });
         let styleObj = {};
         if (pos) {
-            styleObj.left = pos.left;
-            styleObj.top = pos.top;
+            styleObj.left = pos.get("left");
+            styleObj.top = pos.get("top");
         }
-        let imgFigureClassName = "img-figure";
-        imgFigureClassName += isInverse ? " is-inverse" : "";
         if (rotate) {
             ["Moz", "ms", "Webkit", ""].forEach(item => {
                 let prop = item ? item + "Transform" : "transform";

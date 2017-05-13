@@ -1,7 +1,7 @@
 import * as actionTypes from "../constants/ActionTypes";
 import { fromJS } from "immutable";
 
-const initState = {
+const initState = fromJS({
     /**
      * 图片位置
      * @type {Object}
@@ -25,12 +25,13 @@ const initState = {
      * @type {Boolean}
      */
     isCenter: false
-};
+});
 
 const imageReducer = (state = initState, action) => {
     switch (action.type) {
         case actionTypes.IMAGE_FLIP:
-            return fromJS(state).set("isInverse", action.payload.isInverse).toJS();
+            state = state.set("isInverse", action.payload.isInverse);
+            return state;
         default:
             return state;
     }

@@ -52,13 +52,13 @@ class Gallery extends Component {
      * @return {null} 无
      */
     init() {
-        const imgsArrangeArr = this.props.imgsArrangeArr;
+        const { imgsArrangeArr } = this.props;
         let flag = true;
         imgsArrangeArr.forEach(item => {
-            if (item.isCenter) flag = false;
+            if (item.get("isCenter")) flag = false;
         });
         // 如果所有图片都不在中心并且有图片，则需要初始化
-        if (flag && imgsArrangeArr.length) this.updateConstant();
+        if (flag && imgsArrangeArr.size) this.updateConstant();
     }
     /**
      * 翻转图片
@@ -68,7 +68,7 @@ class Gallery extends Component {
     inverse(idx) {
         return () => {
             let { dispatch, imgsArrangeArr } = this.props;
-            dispatch(actions.flipImage(idx, !imgsArrangeArr[idx].isInverse));
+            dispatch(actions.flipImage(idx, !imgsArrangeArr.getIn([idx, "isInverse"])));
         }
     }
     /**
@@ -98,22 +98,13 @@ class Gallery extends Component {
             vPosRangeX = vPosRange.x,
             topImgNum = Math.floor(Math.random() * 2);
         let
-            { imgsArrangeArr } = this.props,
-            newImgsArrangeArr = [],
+            imgsArrangeArr = this.props.imgsArrangeArr.toJS(),
             imgsArrangeTopArr = [],
             topImgSpliceIdx = 0,
             imgsArrangeCenterArr,
             i, j, k,
             hPosRangeLORX;
-        imgsArrangeArr.forEach((item, idx) => {
-            newImgsArrangeArr.push({});
-            newImgsArrangeArr[idx].pos = item.pos;
-            newImgsArrangeArr[idx].rotate = item.rotate;
-            newImgsArrangeArr[idx].isInverse = item.isInverse;
-            newImgsArrangeArr[idx].isCenter = item.isCenter;
-            newImgsArrangeArr[idx].info = item.info;
-        });
-        imgsArrangeCenterArr = newImgsArrangeArr.splice(centerIdx, 1),
+        imgsArrangeCenterArr = imgsArrangeArr.splice(centerIdx, 1),
         // 首先居中 centerIdx 的图片
         imgsArrangeCenterArr[0] = { ...imgsArrangeCenterArr[0], ...{
             pos: centerPos,
@@ -121,8 +112,8 @@ class Gallery extends Component {
             isCenter: true
         } };
         // 取出要布局上侧的图片的状态信息
-        topImgSpliceIdx = Math.ceil(Math.random() * (newImgsArrangeArr.length - topImgNum));
-        imgsArrangeTopArr = newImgsArrangeArr.splice(topImgSpliceIdx, topImgNum);
+        topImgSpliceIdx = Math.ceil(Math.random() * (imgsArrangeArr.length - topImgNum));
+        imgsArrangeTopArr = imgsArrangeArr.splice(topImgSpliceIdx, topImgNum);
         // 布局位于上侧的图片
         imgsArrangeTopArr.forEach((item, idx) => {
             imgsArrangeTopArr[idx] = { ...imgsArrangeTopArr[idx], ...{
@@ -135,10 +126,10 @@ class Gallery extends Component {
             } };
         });
         // 布局左右两侧的图片
-        for (i = 0, j = newImgsArrangeArr.length, k = j / 2; i < j; i++) {
+        for (i = 0, j = imgsArrangeArr.length, k = j / 2; i < j; i++) {
             // 前半部分布局在左边，后半部分布局在右边
             hPosRangeLORX = i < k ? hPosRangeLeftSecX : hPosRangeRightSecX;
-            newImgsArrangeArr[i] = { ...newImgsArrangeArr[i], ...{
+            imgsArrangeArr[i] = { ...imgsArrangeArr[i], ...{
                 pos: {
                     top: getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
                     left: getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
@@ -148,10 +139,10 @@ class Gallery extends Component {
             } };
         }
         if (imgsArrangeTopArr && imgsArrangeTopArr[0]) {
-            newImgsArrangeArr.splice(topImgSpliceIdx, 0, imgsArrangeTopArr[0]);
+            imgsArrangeArr.splice(topImgSpliceIdx, 0, imgsArrangeTopArr[0]);
         }
-        newImgsArrangeArr.splice(centerIdx, 0, imgsArrangeCenterArr[0]);
-        dispatch(actions.setImages(newImgsArrangeArr));
+        imgsArrangeArr.splice(centerIdx, 0, imgsArrangeCenterArr[0]);
+        dispatch(actions.setImages(imgsArrangeArr));
     }
     updateConstant() {
         const
@@ -185,33 +176,31 @@ class Gallery extends Component {
         this.init();
     }
     render() {
-        let controllerUnits = [],
-            imgFigures = [],
-            { imgsArrangeArr } = this.props;
-        imgsArrangeArr.forEach((item, idx) => {
-            imgFigures.push(
-                <ImgFigure
-                    key={item.info.id}
-                    data={item}
-                    ref={"imgFigure" + idx}
-                    inverse={this.inverse(idx)}
-                    center={this.center(idx)} />
-            );
-            controllerUnits.push(
-                <ControllerUnit
-                    key={item.info.id}
-                    data={item}
-                    inverse={this.inverse(idx)}
-                    center={this.center(idx)} />
-            );
-        });
+        const { imgsArrangeArr } = this.props;
         return (
             <section className="stage" ref="stage">
                 <section className="img-sec">
-                    {imgFigures}
+                    {
+                        imgsArrangeArr.map((item, idx) => {
+                            return <ImgFigure
+                                       key={item.getIn(["info", "id"])}
+                                       data={item}
+                                       ref={"imgFigure" + idx}
+                                       inverse={this.inverse(idx)}
+                                       center={this.center(idx)} />
+                        })
+                    }
                 </section>
                 <nav className="controller-nav">
-                    {controllerUnits}
+                    {
+                        imgsArrangeArr.map((item, idx) => {
+                            return <ControllerUnit
+                                       key={item.getIn(["info", "id"])}
+                                       data={item}
+                                       inverse={this.inverse(idx)}
+                                       center={this.center(idx)} />
+                        })
+                    }
                 </nav>
             </section>
         )

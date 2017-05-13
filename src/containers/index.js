@@ -15,9 +15,8 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
     const { images } = state;
-    const { imgsArrangeArr } = images;
     return {
-        imgsArrangeArr
+        imgsArrangeArr: images.get("imgsArrangeArr")
     };
 };
 
