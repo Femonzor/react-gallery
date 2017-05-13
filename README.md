@@ -1,5 +1,5 @@
 ## 介绍：
-一个基于react的画册webapp，react入门。
+一个基于react的画册webapp，使用了redux + immutable。
 
 ## 下载：
 ```

@@ -11,7 +11,15 @@ var SITE_DIR = "/react-gallery";
 module.exports = {
     entry: {
         app: SRC_PATH + "/App.js",
-        vendor: ["react", "react-dom", "classnames"]
+        vendor: [
+            "react",
+            "react-dom",
+            "classnames",
+            "immutable",
+            "react-redux",
+            "redux",
+            "redux-thunk"
+        ]
     },
     output: {
         path: DIST_PATH,
